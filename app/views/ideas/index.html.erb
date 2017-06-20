@@ -1,0 +1,24 @@
+<div>Hi <%= @current_user.alias %>! </div>
+
+<div>
+	<form action="/bright_ideas" method="post">
+		<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+		<input type="text" name="idea[content]" placeholder="Post something witty...">
+		<input type="submit" value="Idea!">
+	</form>
+</div>
+
+<div class=ideas>
+	<% @ideas.each do |idea| %>
+  <p> <a href="/users/<%= idea.user.id %>"><%= idea.user.name %></a> says:</p>
+  <p> <%= idea.content %> </p>
+  <p> <a href="/bright_ideas/<%= idea.id %>"><%= idea.likes.length %> people</a> like this</p>
+  <% unless @ideas_liked.include? idea.id %>
+  		<a href="/likes/<%= idea.id %>" data-method="post">like</a>
+  <% end %>
+  <% if current_user == idea.user %>
+    <a href="/bright_ideas/<%= idea.id %>/destroy" data-method="delete">delete</a>
+  <% end %>
+  <hr>
+<% end %>
+</div>
